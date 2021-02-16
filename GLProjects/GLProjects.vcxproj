@@ -19,15 +19,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="GLUTCallbacks.h" />
     <ClInclude Include="GL\freeglut.h" />
     <ClInclude Include="GL\freeglut_ext.h" />
     <ClInclude Include="GL\freeglut_std.h" />
     <ClInclude Include="GL\glut.h" />
+    <ClInclude Include="MeshLoader.h" />
+    <ClInclude Include="Pyramid.h" />
+    <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Source.h" />
+    <ClInclude Include="Structures.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="GLUTCallbacks.cpp" />
+    <ClCompile Include="MeshLoader.cpp" />
+    <ClCompile Include="Pyramid.cpp" />
+    <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>

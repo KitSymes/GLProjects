@@ -7,14 +7,24 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-Vertex Source::vertices[] = { 1, 1, 1, -1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1, 1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1 };
-Colour Source::colours[] = { 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1 };
-
-Vertex Source::indexedVertices[] = { 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, -1, -1, -1, -1 };
-Colour Source::indexedColors[] = { 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0 };
-GLushort Source::indices[] = {0, 1, 2, 2, 3, 0, 0, 3, 4, 4, 5, 0, 0, 5, 6, 6, 1, 0, 1, 6, 7, 7, 2, 1, 7, 4, 3, 3, 2, 7, 4, 7, 6, 6, 5, 4};
-
 Source::Source(int argc, char* argv[])
+{
+	srand(time(NULL));
+
+	InitGL(argc, argv);
+	InitObjects();
+
+	glutMainLoop();
+}
+
+Source::~Source(void)
+{
+	delete camera;
+	delete objects[0];
+	delete[] objects;
+}
+
+void Source::InitObjects()
 {
 	rotation = 0.0f;
 	camera = new Camera();
@@ -28,9 +38,20 @@ Source::Source(int argc, char* argv[])
 	camera->up.y = 1.0f;
 	camera->up.z = 0.0f;
 
+	Mesh* cubeMesh = MeshLoader::Load((char*)"cube.txt");
+	Mesh* pyramidMesh = MeshLoader::Load((char*)"pyramid.txt");
+
+	for (int i = 0; i < 25; i++)
+		objects[i] = new Cube(cubeMesh, rand() % 25 - 12.5f, rand() % 25 - 12.5f, rand() % 25 - 12.5f);
+	for (int i = 25; i < 50; i++)
+		objects[i] = new Pyramid(pyramidMesh, rand() % 25 - 12.5f, rand() % 25 - 12.5f, rand() % 25 - 12.5f);
+}
+
+void Source::InitGL(int argc, char* argv[])
+{
 	GLUTCallbacks::Init(this);
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(800, 800);
 	glutCreateWindow("GL Project");
 	glutDisplayFunc(GLUTCallbacks::Display);
@@ -46,12 +67,8 @@ Source::Source(int argc, char* argv[])
 	glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	glutMainLoop();
-}
-
-Source::~Source(void)
-{
-	delete camera;
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_ALWAYS);
 }
 
 void Source::Update()
@@ -69,11 +86,14 @@ void Source::Update()
 
 void Source::Display()
 {
-	glClear(GL_COLOR_BUFFER_BIT); // Clears frame
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clears frame
+
+	for (int i = 0; i < 50; i++)
+		objects[i]->Draw();
 
 	//DrawCube();
 	//DrawCubeArray();
-	DrawIndexedCube();
+	//DrawIndexedCube();
 
 	/*glPushMatrix();
 	glTranslatef(-0.5f, 0.5f, -2.0f);
@@ -119,7 +139,7 @@ void Source::DrawPolygon()
 	glBegin(GL_POLYGON); // Starts Drawing Polygon
 	{
 		glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(-0.6, 0.2);
+		glVertex2f(-0.6f, 0.2f);
 		/*glColor4f(0.9f, 1.0f, 1.0f, 0.0f);
 		glVertex2f(-0.4, 0.2);
 		glColor4f(0.8f, 1.0f, 1.0f, 0.0f);
@@ -133,15 +153,15 @@ void Source::DrawPolygon()
 		glColor4f(0.4f, 1.0f, 1.0f, 0.0f);
 		glVertex2f(0.4, 0.2);*/
 		glColor4f(0.3f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(0.6, 0.2);
+		glVertex2f(0.6f, 0.2f);
 		glColor4f(0.2f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(0.6, -0.2);
+		glVertex2f(0.6f, -0.2f);
 		glColor4f(0.1f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(0.2, -0.45);
+		glVertex2f(0.2f, -0.45f);
 		glColor4f(0.0f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(-0.2, -0.45);
+		glVertex2f(-0.2f, -0.45f);
 		glColor4f(0.5f, 0.9f, 1.0f, 0.0f);
-		glVertex2f(-0.6, -0.2);
+		glVertex2f(-0.6f, -0.2f);
 	}
 	glEnd(); // Stops
 }
@@ -151,143 +171,14 @@ void Source::DrawHex(float scale)
 	scale /= 2;
 	glBegin(GL_POLYGON);
 	{
-		glVertex2f(-(0.05 * scale), (0.03 * scale));
-		glVertex2f(0, (0.06 * scale));
-		glVertex2f((0.05 * scale), (0.03 * scale));
-		glVertex2f((0.05 * scale), -(0.03 * scale));
-		glVertex2f(0, -(0.06 * scale));
-		glVertex2f(-(0.05 * scale), -(0.03 * scale));
+		glVertex2f(-(0.05f * scale), (0.03f * scale));
+		glVertex2f(0, (0.06f * scale));
+		glVertex2f((0.05f * scale), (0.03f * scale));
+		glVertex2f((0.05f * scale), -(0.03f * scale));
+		glVertex2f(0, -(0.06f * scale));
+		glVertex2f(-(0.05f * scale), -(0.03f * scale));
 	}
 	glEnd();
-}
-
-void Source::DrawCube()
-{
-	glBegin(GL_TRIANGLES);
-	{
-		glColor3f(1, 1, 1);
-		glVertex3f(1, 1, 1);
-		glColor3f(1, 1, 0);
-		glVertex3f(-1, 1, 1);
-		glColor3f(1, 0, 0);
-		glVertex3f(-1, -1, 1);
-
-		glColor3f(1, 0, 0);
-		glVertex3f(-1, -1, 1);
-		glColor3f(1, 0, 1);
-		glVertex3f(1, -1, 1);
-		glColor3f(1, 1, 1);
-		glVertex3f(1, 1, 1);
-	}
-
-	{
-		glColor3f(1, 1, 1);
-		glVertex3f(1, 1, 1);
-		glColor3f(1, 0, 1);
-		glVertex3f(1, -1, 1);
-		glColor3f(0, 0, 1);
-		glVertex3f(1, -1, -1);
-
-		glColor3f(0, 0, 1);
-		glVertex3f(1, -1, -1);
-		glColor3f(0, 1, 1);
-		glVertex3f(1, 1, -1);
-		glColor3f(1, 1, 1);
-		glVertex3f(1, 1, 1);
-	}
-
-	{
-		glColor3f(1, 1, 1);
-		glVertex3f(1, 1, 1);
-		glColor3f(0, 1, 1);
-		glVertex3f(1, 1, -1);
-		glColor3f(0, 1, 0);
-		glVertex3f(-1, 1, -1);
-
-		glColor3f(0, 1, 0);
-		glVertex3f(-1, 1, -1);
-		glColor3f(1, 1, 0);
-		glVertex3f(-1, 1, 1);
-		glColor3f(1, 1, 1);
-		glVertex3f(1, 1, 1);
-	}
-
-	{
-		glColor3f(1, 1, 0);
-		glVertex3f(-1, 1, 1);
-		glColor3f(0, 1, 0);
-		glVertex3f(-1, 1, -1);
-		glColor3f(0, 0, 0);
-		glVertex3f(-1, -1, -1);
-
-		glColor3f(0, 0, 0);
-		glVertex3f(-1, -1, -1);
-		glColor3f(1, 0, 0);
-		glVertex3f(-1, -1, 1);
-		glColor3f(1, 1, 0);
-		glVertex3f(-1, 1, 1);
-	}
-
-	{
-		glColor3f(0, 0, 0);
-		glVertex3f(-1, -1, -1);
-		glColor3f(0, 0, 1);
-		glVertex3f(1, -1, -1);
-		glColor3f(1, 0, 1);
-		glVertex3f(1, -1, 1);
-
-		glColor3f(1, 0, 1);
-		glVertex3f(1, -1, 1);
-		glColor3f(1, 0, 0);
-		glVertex3f(-1, -1, 1);
-		glColor3f(0, 0, 0);
-		glVertex3f(-1, -1, -1);
-	}
-
-	{
-		glColor3f(0, 0, 1);
-		glVertex3f(1, -1, -1);
-		glColor3f(0, 0, 0);
-		glVertex3f(-1, -1, -1);
-		glColor3f(0, 1, 0);
-		glVertex3f(-1, 1, -1);
-
-		glColor3f(0, 1, 0);
-		glVertex3f(-1, 1, -1);
-		glColor3f(0, 1, 1);
-		glVertex3f(1, 1, -1);
-		glColor3f(0, 0, 1);
-		glVertex3f(1, -1, -1);
-	}
-
-
-	glEnd();
-}
-
-void Source::DrawCubeArray()
-{
-	glPushMatrix();
-	glBegin(GL_TRIANGLES);
-	for (int i = 0; i < 36; i++)
-	{
-		glColor3fv(&colours[i].r);
-		glVertex3fv(&vertices[i].x);
-	}
-	glEnd();
-	glPopMatrix();
-}
-
-void Source::DrawIndexedCube()
-{
-	glPushMatrix();
-	glBegin(GL_TRIANGLES);
-	for (int i = 0; i < 36; i++)
-	{
-		glColor3fv(&indexedColors[indices[i]].r);
-		glVertex3fv(&indexedVertices[indices[i]].x);
-	}
-	glEnd();
-	glPopMatrix();
 }
 
 void Source::Keyboard(unsigned char key, int x, int y)
@@ -298,11 +189,11 @@ void Source::Keyboard(unsigned char key, int x, int y)
 		rotation -= 2.0f;
 
 	if (key == 'w')
-		camera->eye.x += 0.1;
+		camera->eye.x += 0.1f;
 	if (key == 's')
-		camera->eye.x -= 0.1;
+		camera->eye.x -= 0.1f;
 	if (key == 'a')
-		camera->eye.z += 0.1;
+		camera->eye.z += 0.1f;
 	if (key == 'd')
-		camera->eye.z -= 0.1;
+		camera->eye.z -= 0.1f;
 }

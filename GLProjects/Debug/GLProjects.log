@@ -1,24 +1,9 @@
-﻿  GLUTCallbacks.cpp
+﻿  Cube.cpp
+  GLUTCallbacks.cpp
+  Pyramid.cpp
+  SceneObject.cpp
   Source.cpp
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(122,23): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(136,22): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(138,23): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(140,24): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(142,25): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(144,24): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(154,37): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(154,14): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(155,23): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(156,36): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(156,20): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(157,30): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(157,20): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(158,17): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(159,31): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(159,14): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(301,23): warning C4305: '+=': truncation from 'double' to 'float'
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(303,23): warning C4305: '-=': truncation from 'double' to 'float'
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(305,23): warning C4305: '+=': truncation from 'double' to 'float'
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(307,23): warning C4305: '-=': truncation from 'double' to 'float'
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(12,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(24,18): warning C4154: deletion of an array expression; conversion to pointer supplied
   Generating Code...
   GLProjects.vcxproj -> E:\Users\Owner\Documents\GitHub\GLProjects\Debug\GLProjects.exe
