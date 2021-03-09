@@ -11,6 +11,7 @@ class Cube : public SceneObject
 private:
 	GLfloat _rotationX = 0.0f, _rotationY = 0.0f, _rotationZ = 0.0f;
 	GLfloat _x, _y, _z;
+	Material* _material;
 public:
 	Cube(Mesh* mesh, GLfloat x, GLfloat y, GLfloat z);
 	~Cube();

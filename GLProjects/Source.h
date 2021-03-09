@@ -16,6 +16,8 @@ private:
 	float rotation;
 	Camera* camera;
 	SceneObject* objects[50];
+	Vector4* _lightPosition;
+	Lighting* _lightData;
 public:
 	// Constructor
 	Source(int argc, char* argv[]);
@@ -24,6 +26,7 @@ public:
 
 	void InitObjects();
 	void InitGL(int argc, char* argv[]);
+	void InitLights();
 
 	// Update Loop
 	void Update();

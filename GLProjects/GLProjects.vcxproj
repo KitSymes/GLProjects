@@ -30,6 +30,7 @@
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Source.h" />
     <ClInclude Include="Structures.h" />
+    <ClInclude Include="Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cube.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="freeglut.dll" />

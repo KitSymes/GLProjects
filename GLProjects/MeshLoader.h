@@ -4,6 +4,6 @@
 
 namespace MeshLoader
 {
-	Mesh* Load(char* path);
+	Mesh* Load(char* path, char* texPath, int width, int height);
 };
 

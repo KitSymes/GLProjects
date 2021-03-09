@@ -13,6 +13,7 @@ Source::Source(int argc, char* argv[])
 
 	InitGL(argc, argv);
 	InitObjects();
+	InitLights();
 
 	glutMainLoop();
 }
@@ -22,27 +23,31 @@ Source::~Source(void)
 	delete camera;
 	delete objects[0];
 	delete[] objects;
+	delete _lightPosition;
+	delete _lightData;
 }
 
 void Source::InitObjects()
 {
 	rotation = 0.0f;
 	camera = new Camera();
-	camera->eye.x = 5.0f;
-	camera->eye.y = 5.0f;
-	camera->eye.z = -5.0f;
+	camera->eye.x = 1.0f;
+	camera->eye.y = -10.0f;
+	camera->eye.z = 0.0f;
 	camera->center.x = 0.0f;
-	camera->center.y = 0.0f;
+	camera->center.y = 1.0f;
 	camera->center.z = 0.0f;
 	camera->up.x = 0.0f;
 	camera->up.y = 1.0f;
 	camera->up.z = 0.0f;
 
-	Mesh* cubeMesh = MeshLoader::Load((char*)"cube.txt");
-	Mesh* pyramidMesh = MeshLoader::Load((char*)"pyramid.txt");
+	Mesh* cubeMesh = MeshLoader::Load((char*)"cube.txt", (char*)"stars.raw", 512, 512);
+	Mesh* pyramidMesh = MeshLoader::Load((char*)"pyramid.txt", (char*)"penguins.raw", 512, 512);
 
 	for (int i = 0; i < 25; i++)
 		objects[i] = new Cube(cubeMesh, rand() % 25 - 12.5f, rand() % 25 - 12.5f, rand() % 25 - 12.5f);
+		//objects[i] = new Cube(cubeMesh, rand() % 2, rand() % 2, rand() % 2);
+		//objects[i] = new Cube(cubeMesh, 0, 0, 0);
 	for (int i = 25; i < 50; i++)
 		objects[i] = new Pyramid(pyramidMesh, rand() % 25 - 12.5f, rand() % 25 - 12.5f, rand() % 25 - 12.5f);
 }
@@ -63,12 +68,39 @@ void Source::InitGL(int argc, char* argv[])
 	glViewport(0, 0, 800, 800);
 	// Set the correct perspective
 	// FoV, Aspect Ratio, Near Clipping, Far Clipping
-	gluPerspective(45, 1, 0, 1000);
+	gluPerspective(45, 1, 0.01f, 1000);
 	glMatrixMode(GL_MODELVIEW);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_ALWAYS);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_ALWAYS);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+}
+
+void Source::InitLights()
+{
+	_lightPosition = new Vector4();
+	_lightPosition->x = 0.0;
+	_lightPosition->y = 0.0;
+	_lightPosition->z = 1.0;
+	_lightPosition->w = 0.0;
+
+	_lightData = new Lighting();
+	_lightData->Ambient.x = 0.2;
+	_lightData->Ambient.y = 0.2;
+	_lightData->Ambient.z = 0.2;
+	_lightData->Ambient.w = 1.0;
+	_lightData->Diffuse.x = 0.8;
+	_lightData->Diffuse.y = 0.8;
+	_lightData->Diffuse.z = 0.8;
+	_lightData->Diffuse.w = 1.0;
+	_lightData->Specular.x = 0.2;
+	_lightData->Specular.y = 0.2;
+	_lightData->Specular.z = 0.2;
+	_lightData->Specular.w = 1.0;
 }
 
 void Source::Update()
@@ -77,6 +109,10 @@ void Source::Update()
 	gluLookAt(camera->eye.x, camera->eye.y, camera->eye.z,
 		camera->center.x, camera->center.y, camera->center.z,
 		camera->up.x, camera->up.y, camera->up.z);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, &(_lightData->Ambient.x));
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, &(_lightData->Diffuse.x));
+	glLightfv(GL_LIGHT0, GL_SPECULAR, &(_lightData->Specular.x));
+	glLightfv(GL_LIGHT0, GL_POSITION, &(_lightPosition->x));
 
 	if (rotation >= 360.0f)
 		rotation = 0.0f;

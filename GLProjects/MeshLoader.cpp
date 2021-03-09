@@ -8,7 +8,8 @@ using namespace std;
 namespace MeshLoader
 {
 	void LoadVertices(ifstream& inFile, Mesh& mesh);
-	void LoadColours(ifstream& inFile, Mesh& mesh);
+	void LoadNormals(ifstream& inFile, Mesh& mesh);
+	void LoadTexCoords(ifstream& inFile, Mesh& mesh);
 	void LoadIndices(ifstream& inFile, Mesh& mesh);
 
 	void LoadVertices(ifstream& inFile, Mesh& mesh)
@@ -28,19 +29,36 @@ namespace MeshLoader
 		}
 	}
 
-	void LoadColours(ifstream& inFile, Mesh& mesh)
+	void LoadNormals(ifstream& inFile, Mesh& mesh)
 	{
-		inFile >> mesh.ColorCount;
+		inFile >> mesh.NormalCount;
 
-		if (mesh.ColorCount > 0)
+		if (mesh.NormalCount > 0)
 		{
-			mesh.Colors = new Color[mesh.ColorCount];
+			mesh.Normals = new Vector3[mesh.NormalCount];
 
-			for (int i = 0; i < mesh.ColorCount; i++)
+			for (int i = 0; i < mesh.NormalCount; i++)
 			{
-				inFile >> mesh.Colors[i].r;
-				inFile >> mesh.Colors[i].g;
-				inFile >> mesh.Colors[i].b;
+				inFile >> mesh.Normals[i].x;
+				inFile >> mesh.Normals[i].y;
+				inFile >> mesh.Normals[i].z;
+			}
+		}
+	}
+
+	void LoadTexCoords(ifstream& inFile, Mesh& mesh)
+	{
+
+		inFile >> mesh.TexCoordCount;
+
+		if (mesh.TexCoordCount > 0)
+		{
+			mesh.TexCoords = new TexCoord[mesh.TexCoordCount];
+
+			for (int i = 0; i < mesh.TexCoordCount; i += 1)
+			{
+				inFile >> mesh.TexCoords[i].u;
+				inFile >> mesh.TexCoords[i].v;
 			}
 		}
 	}
@@ -54,16 +72,14 @@ namespace MeshLoader
 		{
 			mesh.Indices = new GLushort[mesh.IndexCount];
 
-			for (int i = 0; i < mesh.IndexCount; i += 3)
+			for (int i = 0; i < mesh.IndexCount; i += 1)
 			{
 				inFile >> mesh.Indices[i];
-				inFile >> mesh.Indices[i + 1];
-				inFile >> mesh.Indices[i + 2];
 			}
 		}
 	}
 
-	Mesh* MeshLoader::Load(char* path)
+	Mesh* MeshLoader::Load(char* path, char* texPath, int width, int height)
 	{
 		Mesh* mesh = new Mesh();
 
@@ -77,9 +93,16 @@ namespace MeshLoader
 			return nullptr;
 		}
 
+
 		LoadVertices(inFile, *mesh);
-		LoadColours(inFile, *mesh);
+		LoadTexCoords(inFile, *mesh);
+		LoadNormals(inFile, *mesh);
 		LoadIndices(inFile, *mesh);
+
+
+		mesh->_texture = new Texture2D();
+		mesh->_texture->Load(texPath, width, height);
+		//texmesh->_texture->LoadBitMap((char*)"test.bmp");
 
 		return mesh;
 	}

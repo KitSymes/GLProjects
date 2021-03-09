@@ -1,9 +1,13 @@
-﻿  Cube.cpp
-  GLUTCallbacks.cpp
-  Pyramid.cpp
-  SceneObject.cpp
-  Source.cpp
+﻿  Source.cpp
 E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(12,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(24,18): warning C4154: deletion of an array expression; conversion to pointer supplied
-  Generating Code...
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(25,18): warning C4154: deletion of an array expression; conversion to pointer supplied
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(92,29): warning C4305: '=': truncation from 'double' to 'float'
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(93,29): warning C4305: '=': truncation from 'double' to 'float'
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(94,29): warning C4305: '=': truncation from 'double' to 'float'
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(96,29): warning C4305: '=': truncation from 'double' to 'float'
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(97,29): warning C4305: '=': truncation from 'double' to 'float'
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(98,29): warning C4305: '=': truncation from 'double' to 'float'
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(100,30): warning C4305: '=': truncation from 'double' to 'float'
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(101,30): warning C4305: '=': truncation from 'double' to 'float'
+E:\Users\Owner\Documents\GitHub\GLProjects\GLProjects\Source.cpp(102,30): warning C4305: '=': truncation from 'double' to 'float'
   GLProjects.vcxproj -> E:\Users\Owner\Documents\GitHub\GLProjects\Debug\GLProjects.exe

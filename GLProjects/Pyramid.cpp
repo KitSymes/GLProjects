@@ -7,11 +7,6 @@ Pyramid::Pyramid(Mesh* mesh, GLfloat x, GLfloat y, GLfloat z) : SceneObject(mesh
 	_z = z;
 }
 
-Pyramid::~Pyramid()
-{
-	delete _mesh;
-}
-
 void Pyramid::SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ)
 {
 	_rotationX = rotationX;
@@ -22,10 +17,13 @@ void Pyramid::SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat rotation
 void Pyramid::Draw()
 {
 	if (_mesh != nullptr) {
+		glBindTexture(GL_TEXTURE_2D, _mesh->_texture->GetID());
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_COLOR_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
 		glVertexPointer(3, GL_FLOAT, 0, _mesh->Vertices);
-		glColorPointer(3, GL_FLOAT, 0, _mesh->Colors);
+		glTexCoordPointer(2, GL_FLOAT, 0, _mesh->TexCoords);
+		glNormalPointer(GL_FLOAT, 0, _mesh->Normals);
 
 		glPushMatrix();
 		glRotatef(_rotationX, 1.0f, 0.0f, 0.0f);
@@ -35,8 +33,9 @@ void Pyramid::Draw()
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, _mesh->Indices);
 		glPopMatrix();
 
-		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
 }
 
