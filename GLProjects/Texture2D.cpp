@@ -51,34 +51,27 @@ void Texture2D::LoadBitMap(char* filename)
 	FILE* f = fopen(filename, "rb");
 	unsigned char info[54];
 
-	// read the 54-byte header
-	fread(info, sizeof(unsigned char), 54, f);
+	fread(info, sizeof(unsigned char), 54, f); // Read Header
+	int width = *(int*)&info[18]; // Width is at byte 18
+	int height = *(int*)&info[22]; // Height is at byte 22
 
-	// extract image height and width from header
-	int width = *(int*)&info[18];
-	int height = *(int*)&info[22];
+	//cout << width << " " << height << endl;
 
-	cout << width << " " << height << endl;
-
-	// allocate 3 bytes per pixel
-	int size = 3 * width * height;
-	unsigned char* data = new unsigned char[size];
-
-	// read the rest of the data at once
-	fread(data, sizeof(unsigned char), size, f);
+	int size = 3 * width * height; // 3 bytes per pixel when saved in 24 bit depth
+	unsigned char* image = new unsigned char[size];
+	fread(image, sizeof(unsigned char), size, f);
 	fclose(f);
 
-	for (i = 0; i < size; i += 3)
+	for (i = 0; i < size; i += 3) // Flip from BGR to RGB
 	{
-		// flip the order of every 3 bytes
-		unsigned char tmp = data[i];
-		data[i] = data[i + 2];
-		data[i + 2] = tmp;
+		unsigned char b = image[i];
+		image[i] = image[i + 2]; // B = R
+		image[i + 2] = b; // R = B
 	}
 
 	glGenTextures(1, &_ID);
 	glBindTexture(GL_TEXTURE_2D, _ID);
-	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, width, height, GL_RGB, GL_UNSIGNED_BYTE, image);
 
-	delete[] data;
+	delete[] image; // Delete old data
 }

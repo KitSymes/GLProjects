@@ -26,6 +26,7 @@
     <ClInclude Include="GL\freeglut_std.h" />
     <ClInclude Include="GL\glut.h" />
     <ClInclude Include="MeshLoader.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Source.h" />
@@ -36,6 +37,7 @@
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="GLUTCallbacks.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="Source.cpp" />

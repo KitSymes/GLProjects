@@ -1,4 +1,6 @@
 #include "Source.h"
+#define windowWidth 800
+#define windowHeight 800
 
 int main(int argc, char* argv[])
 {
@@ -21,6 +23,7 @@ Source::Source(int argc, char* argv[])
 Source::~Source(void)
 {
 	delete camera;
+	delete _player;
 	delete objects[0];
 	delete[] objects;
 	delete _lightPosition;
@@ -44,12 +47,17 @@ void Source::InitObjects()
 	Mesh* cubeMesh = MeshLoader::Load((char*)"cube.txt", (char*)"stars.raw", 512, 512);
 	Mesh* pyramidMesh = MeshLoader::Load((char*)"pyramid.txt", (char*)"penguins.raw", 512, 512);
 
+
+	int distance = 10;
+
 	for (int i = 0; i < 25; i++)
-		objects[i] = new Cube(cubeMesh, rand() % 25 - 12.5f, rand() % 25 - 12.5f, rand() % 25 - 12.5f);
-		//objects[i] = new Cube(cubeMesh, rand() % 2, rand() % 2, rand() % 2);
+		objects[i] = new Cube(cubeMesh, rand() % distance - distance / 2.0f, rand() % distance - distance / 2.0f, rand() % distance - distance / 2.0f);
+	//objects[i] = new Cube(cubeMesh, rand() % 2, rand() % 2, rand() % 2);
 		//objects[i] = new Cube(cubeMesh, 0, 0, 0);
 	for (int i = 25; i < 50; i++)
 		objects[i] = new Pyramid(pyramidMesh, rand() % 25 - 12.5f, rand() % 25 - 12.5f, rand() % 25 - 12.5f);
+
+	_player = new Player(0, 0, 0);
 }
 
 void Source::InitGL(int argc, char* argv[])
@@ -57,7 +65,7 @@ void Source::InitGL(int argc, char* argv[])
 	GLUTCallbacks::Init(this);
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(800, 800);
+	glutInitWindowSize(windowWidth, windowHeight);
 	glutCreateWindow("GL Project");
 	glutDisplayFunc(GLUTCallbacks::Display);
 	glutTimerFunc(REFRESH_RATE, GLUTCallbacks::Timer, REFRESH_RATE);
@@ -117,6 +125,8 @@ void Source::Update()
 	if (rotation >= 360.0f)
 		rotation = 0.0f;
 
+	_player->Update();
+
 	glutPostRedisplay();
 }
 
@@ -124,8 +134,15 @@ void Source::Display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clears frame
 
-	for (int i = 0; i < 50; i++)
-		objects[i]->Draw();
+	//for (int i = 0; i < 50; i++)
+		//objects[i]->Draw();
+	//objects[0]->Draw();
+
+	_player->Draw();
+
+	Vector3 v = { 0.0f, 780.0f, 0.0f };
+	Color c = { 0.0f, 1.0f, 0.0f };
+	DrawString("Test String", &v, &c);
 
 	//DrawCube();
 	//DrawCubeArray();
@@ -217,6 +234,41 @@ void Source::DrawHex(float scale)
 	glEnd();
 }
 
+void Source::DrawString(const char* text, Vector3* position, Color* color)
+{
+	glPushMatrix();
+	bool lights = glIsEnabled(GL_LIGHTING);
+	glDisable(GL_LIGHTING);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+
+	glLoadIdentity();
+	gluOrtho2D(0, windowWidth, 0, windowHeight);
+	//glColor4f(color->r, color->g, color->b, 0.0f);
+	glRasterPos2i(position->x, position->y);
+	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (unsigned char*)text);
+
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+
+	if (lights)
+		glEnable(GL_LIGHTING);
+	glPopMatrix();
+
+	// vvvvvvvvvv Tutorial Code vvvvvvvvvv
+
+	/*glPushMatrix();
+
+	glTranslatef(position->x, position->y, position->z);
+	glRasterPos2f(0.0f, 0.0f);
+	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (unsigned char*)text);
+
+	glPopMatrix();*/
+}
+
 void Source::Keyboard(unsigned char key, int x, int y)
 {
 	if (key == 'q')
@@ -225,11 +277,24 @@ void Source::Keyboard(unsigned char key, int x, int y)
 		rotation -= 2.0f;
 
 	if (key == 'w')
+	{
 		camera->eye.x += 0.1f;
+		camera->center.x += 0.1f;
+	}
 	if (key == 's')
+	{
 		camera->eye.x -= 0.1f;
+		camera->center.x -= 0.1f;
+	}
 	if (key == 'a')
+	{
 		camera->eye.z += 0.1f;
+		camera->center.z += 0.1f;
+	}
 	if (key == 'd')
+	{
 		camera->eye.z -= 0.1f;
+		camera->center.z -= 0.1f;
+	}
+
 }

@@ -1,11 +1,9 @@
-#include "Cube.h"
+#include "Player.h"
 
-//Vertex Cube::indexedVertices[] = { 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, -1, -1, -1, -1 };
-//Colour Cube::indexedColors[] = { 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0 };
-//GLushort Cube::indices[] = { 0, 1, 2, 2, 3, 0, 0, 3, 4, 4, 5, 0, 0, 5, 6, 6, 1, 0, 1, 6, 7, 7, 2, 1, 7, 4, 3, 3, 2, 7, 4, 7, 6, 6, 5, 4 };
-
-Cube::Cube(Mesh* mesh, GLfloat x, GLfloat y, GLfloat z) : SceneObject(mesh)
+Player::Player(GLfloat x, GLfloat y, GLfloat z) : SceneObject()
 {
+	_mesh = MeshLoader::LoadObj((char*)"Resources/Models/fighter.obj", (char*)"Resources/Textures/Player.bmp");
+
 	_x = x;
 	_y = y;
 	_z = z;
@@ -29,28 +27,21 @@ Cube::Cube(Mesh* mesh, GLfloat x, GLfloat y, GLfloat z) : SceneObject(mesh)
 	_material->Specular.w = 1.0;
 }
 
-Cube::~Cube()
+Player::~Player()
 {
 	delete _material;
 }
 
-void Cube::SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ)
-{
-	_rotationX = rotationX;
-	_rotationY = rotationY;
-	_rotationZ = rotationZ;
-}
-
-void Cube::Draw()
+void Player::Draw()
 {
 	if (_mesh != nullptr) {
 		glBindTexture(GL_TEXTURE_2D, _mesh->_texture->GetID());
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		/*glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glVertexPointer(3, GL_FLOAT, 0, _mesh->Vertices);
 		glTexCoordPointer(2, GL_FLOAT, 0, _mesh->TexCoords);
-		glNormalPointer(GL_FLOAT, 0, _mesh->Normals);
+		glNormalPointer(GL_FLOAT, 0, _mesh->Normals);*/
 		glMaterialfv(GL_FRONT, GL_AMBIENT, &(_material->Ambient.x));
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, &(_material->Diffuse.x));
 		glMaterialfv(GL_FRONT, GL_SPECULAR, &(_material->Specular.x));
@@ -61,7 +52,17 @@ void Cube::Draw()
 		glRotatef(_rotationY, 0.0f, 1.0f, 0.0f);
 		glRotatef(_rotationZ, 0.0f, 0.0f, 1.0f);
 		glTranslatef(_x, _y, _z);
-		glDrawElements(GL_TRIANGLES, _mesh->IndexCount, GL_UNSIGNED_SHORT, _mesh->Indices);
+		glBegin(GL_TRIANGLES);
+		for (int i = 0; i < _mesh->IndexCount; i++)
+		{
+			TexCoord tc = _mesh->TexCoords[i];
+			glTexCoord2f(tc.u, tc.v);
+			Vector3 n = _mesh->Normals[i];
+			glNormal3f(n.x, n.y, n.z);
+			Vertex v = _mesh->Vertices[_mesh->Indices[i]];
+			glVertex3f(v.x, v.y, v.z);
+		}
+		glEnd();
 		glPopMatrix();
 
 		glDisableClientState(GL_NORMAL_ARRAY);
@@ -70,9 +71,9 @@ void Cube::Draw()
 	}
 }
 
-void Cube::Update()
+void Player::Update()
 {
-	_rotationX += 1;
+	/*_rotationX += 1;
 	_rotationY += 1;
-	_rotationZ += 1;
+	_rotationZ += 1;*/
 }
