@@ -185,7 +185,7 @@ namespace MeshLoader
 				s = d - 1;
 				normalBuffer.push_back(normals.at(s));
 
-				cout << "face " << s;
+				//cout << "face " << s;
 
 				inFile >> data;
 				index = data.substr(0, data.find("/"));
@@ -203,7 +203,7 @@ namespace MeshLoader
 				s = d - 1;
 				normalBuffer.push_back(normals.at(s));
 
-				cout << s;
+				//cout << s;
 
 				inFile >> data;
 				index = data.substr(0, data.find("/"));
@@ -221,7 +221,7 @@ namespace MeshLoader
 				s = d - 1;
 				normalBuffer.push_back(normals.at(s));
 
-				cout << s << endl;
+				//cout << s << endl;
 			}
 		}
 

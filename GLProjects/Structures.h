@@ -1,4 +1,7 @@
 #pragma once
+#ifndef _STRUCTURES_H
+#define _STRUCTURES_H
+#include <iostream>
 #include <Windows.h>
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -9,7 +12,36 @@
 struct Vector3
 {
 	float x, y, z;
+
+	Vector3()
+	{
+
+	}
+
+	Vector3(GLfloat x, GLfloat y, GLfloat z)
+	{
+		this->x = x;
+		this->y = y;
+		this->z = z;
+	}
+
+	Vector3 operator +(Vector3 arg)
+	{
+		return Vector3(this->x + arg.x, this->y + arg.y, this->z + arg.z);
+	}
+
+	Vector3 operator -(Vector3 arg)
+	{
+		return Vector3(this->x - arg.x, this->y - arg.y, this->z - arg.z);
+	}
+
+	Vector3 operator -()
+	{
+		return Vector3(-this->x, -this->y, -this->z);
+	}
 };
+
+std::ostream& operator<<(std::ostream& os, const Vector3& obj);
 
 struct Vector4
 {
@@ -18,7 +50,7 @@ struct Vector4
 
 struct Camera
 {
-	Vector3 eye, center, up;
+	Vector3 eyePos, lookingAtPos, up;
 };
 
 struct Color
@@ -79,3 +111,4 @@ struct Mesh
 		delete _texture;
 	}
 };
+#endif

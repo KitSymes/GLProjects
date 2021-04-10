@@ -34,12 +34,12 @@ void Source::InitObjects()
 {
 	rotation = 0.0f;
 	camera = new Camera();
-	camera->eye.x = 1.0f;
-	camera->eye.y = -10.0f;
-	camera->eye.z = 0.0f;
-	camera->center.x = 0.0f;
-	camera->center.y = 1.0f;
-	camera->center.z = 0.0f;
+	camera->eyePos.x = 1.0f;
+	camera->eyePos.y = -10.0f;
+	camera->eyePos.z = 0.0f;
+	camera->lookingAtPos.x = 0.0f;
+	camera->lookingAtPos.y = 1.0f;
+	camera->lookingAtPos.z = 0.0f;
 	camera->up.x = 0.0f;
 	camera->up.y = 1.0f;
 	camera->up.z = 0.0f;
@@ -51,11 +51,15 @@ void Source::InitObjects()
 	int distance = 10;
 
 	for (int i = 0; i < 25; i++)
-		objects[i] = new Cube(cubeMesh, rand() % distance - distance / 2.0f, rand() % distance - distance / 2.0f, rand() % distance - distance / 2.0f);
+		//objects[i] = new Cube(cubeMesh, rand() % distance - distance / 2.0f, rand() % distance - distance / 2.0f, rand() % distance - distance / 2.0f);
 	//objects[i] = new Cube(cubeMesh, rand() % 2, rand() % 2, rand() % 2);
-		//objects[i] = new Cube(cubeMesh, 0, 0, 0);
+		objects[i] = new Cube(cubeMesh, i * 2, 0, 0);
 	for (int i = 25; i < 50; i++)
-		objects[i] = new Pyramid(pyramidMesh, rand() % 25 - 12.5f, rand() % 25 - 12.5f, rand() % 25 - 12.5f);
+		//objects[i] = new Pyramid(pyramidMesh, rand() % 25 - 12.5f, rand() % 25 - 12.5f, rand() % 25 - 12.5f);
+		objects[i] = new Pyramid(pyramidMesh, 0, (i - 25) * 4, 0);
+
+	for (int i = 50; i < 75; i++)
+		objects[i] = new Pyramid(cubeMesh, 0, 0, (i - 50) * 4);
 
 	_player = new Player(0, 0, 0);
 }
@@ -114,9 +118,18 @@ void Source::InitLights()
 void Source::Update()
 {
 	glLoadIdentity();
-	gluLookAt(camera->eye.x, camera->eye.y, camera->eye.z,
-		camera->center.x, camera->center.y, camera->center.z,
+
+	camera->eyePos = _player->GetPosition();
+	camera->eyePos.y -= 1;
+	//camera->lookingAtPos = camera->eyePos;
+	camera->lookingAtPos.x = camera->eyePos.x + cos(_player->GetRotation().x * M_PI / 180) * sin(_player->GetRotation().y * M_PI / 180);
+	camera->lookingAtPos.y = camera->eyePos.y + sin(_player->GetRotation().x * M_PI / 180) * sin(_player->GetRotation().y * M_PI / 180);
+	camera->lookingAtPos.z = camera->eyePos.z + cos(_player->GetRotation().y * M_PI / 180);
+
+	gluLookAt(camera->eyePos.x, camera->eyePos.y, camera->eyePos.z,
+		camera->lookingAtPos.x, camera->lookingAtPos.y, camera->lookingAtPos.z,
 		camera->up.x, camera->up.y, camera->up.z);
+
 	glLightfv(GL_LIGHT0, GL_AMBIENT, &(_lightData->Ambient.x));
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, &(_lightData->Diffuse.x));
 	glLightfv(GL_LIGHT0, GL_SPECULAR, &(_lightData->Specular.x));
@@ -134,8 +147,8 @@ void Source::Display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clears frame
 
-	//for (int i = 0; i < 50; i++)
-		//objects[i]->Draw();
+	for (int i = 0; i < 75; i++)
+		objects[i]->Draw();
 	//objects[0]->Draw();
 
 	_player->Draw();
@@ -272,29 +285,34 @@ void Source::DrawString(const char* text, Vector3* position, Color* color)
 void Source::Keyboard(unsigned char key, int x, int y)
 {
 	if (key == 'q')
-		rotation += 2.0f;
+		camera->eyePos.x += 2.0f;
 	else if (key == 'e')
-		rotation -= 2.0f;
+		camera->eyePos.x -= 2.0f;
+	if (key == 'r')
+		camera->lookingAtPos.x += 2.0f;
+	else if (key == 't')
+		camera->lookingAtPos.x -= 2.0f;
 
 	if (key == 'w')
 	{
-		camera->eye.x += 0.1f;
-		camera->center.x += 0.1f;
+		_player->Move(_player->GetForward());
 	}
 	if (key == 's')
 	{
-		camera->eye.x -= 0.1f;
-		camera->center.x -= 0.1f;
+		_player->Move(-_player->GetForward());
 	}
 	if (key == 'a')
 	{
-		camera->eye.z += 0.1f;
-		camera->center.z += 0.1f;
+		_player->Move(_player->GetRight());
 	}
 	if (key == 'd')
 	{
-		camera->eye.z -= 0.1f;
-		camera->center.z -= 0.1f;
+		_player->Move(-_player->GetRight());
 	}
+	if (key == ' ')
+	{
+		_player->Move(_player->GetUp());
+	}
+	std::cout << key << std::endl;
 
 }

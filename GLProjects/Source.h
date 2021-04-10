@@ -1,12 +1,15 @@
 #pragma once
+#include <iostream>
 #include <Windows.h>
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "GL\freeglut.h"
 #include "GLUTCallbacks.h"
+#include <time.h>
+#include <math.h>
+#include <corecrt_math_defines.h>
 #include "Cube.h"
 #include "Pyramid.h"
-#include <time.h>
 #include "MeshLoader.h"
 #include "Player.h"
 #define REFRESH_RATE 16
@@ -16,7 +19,7 @@ class Source
 private:
 	float rotation;
 	Camera* camera;
-	SceneObject* objects[50];
+	SceneObject* objects[75];
 	Vector4* _lightPosition;
 	Lighting* _lightData;
 
