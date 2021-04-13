@@ -9,10 +9,14 @@ protected:
 	Mesh* _mesh;
 	GLfloat _rotationX = 0.0f, _rotationY = 0.0f, _rotationZ = 0.0f;
 	GLfloat _x, _y, _z;
+
+	SceneObject* parent;
+	SceneObject* child;
+	SceneObject* sibling;
 public:
 	SceneObject();
 	SceneObject(Mesh* mesh);
-	~SceneObject();
+	virtual ~SceneObject();
 
 	virtual void Update() = 0;
 	virtual void Draw() = 0;

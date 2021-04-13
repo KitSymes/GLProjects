@@ -12,6 +12,7 @@
 #include "Pyramid.h"
 #include "MeshLoader.h"
 #include "Player.h"
+#include "GenericObject.h"
 #define REFRESH_RATE 16
 
 class Source

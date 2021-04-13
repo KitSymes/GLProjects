@@ -1,9 +1,7 @@
-#include "Player.h"
+#include "GenericObject.h"
 
-Player::Player(GLfloat x, GLfloat y, GLfloat z) : SceneObject()
+GenericObject::GenericObject(Mesh* mesh, GLfloat x, GLfloat y, GLfloat z) : SceneObject(mesh)
 {
-	_mesh = MeshLoader::LoadObj((char*)"Resources/Models/fighter.obj", (char*)"Resources/Textures/Player.bmp");
-
 	_x = x;
 	_y = y;
 	_z = z;
@@ -16,9 +14,9 @@ Player::Player(GLfloat x, GLfloat y, GLfloat z) : SceneObject()
 	_material->Ambient.z = 0.05;
 	_material->Ambient.w = 1.0;
 
-	_material->Diffuse.x = 0.05*2;
-	_material->Diffuse.y = 0.05*2;
-	_material->Diffuse.z = 0.05*2;
+	_material->Diffuse.x = 0.05 * 2;
+	_material->Diffuse.y = 0.05 * 2;
+	_material->Diffuse.z = 0.05 * 2;
 	_material->Diffuse.w = 1.0;
 
 	_material->Specular.x = 1.0;
@@ -27,21 +25,15 @@ Player::Player(GLfloat x, GLfloat y, GLfloat z) : SceneObject()
 	_material->Specular.w = 1.0;
 }
 
-Player::~Player()
+GenericObject::~GenericObject()
 {
 	delete _material;
 }
 
-void Player::Draw()
+void GenericObject::Draw()
 {
 	if (_mesh != nullptr) {
 		glBindTexture(GL_TEXTURE_2D, _mesh->_texture->GetID());
-		/*glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, _mesh->Vertices);
-		glTexCoordPointer(2, GL_FLOAT, 0, _mesh->TexCoords);
-		glNormalPointer(GL_FLOAT, 0, _mesh->Normals);*/
 		glMaterialfv(GL_FRONT, GL_AMBIENT, &(_material->Ambient.x));
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, &(_material->Diffuse.x));
 		glMaterialfv(GL_FRONT, GL_SPECULAR, &(_material->Specular.x));
@@ -71,9 +63,7 @@ void Player::Draw()
 	}
 }
 
-void Player::Update()
+void GenericObject::Update()
 {
-	/*_rotationX += 1;
-	_rotationY += 1;
-	_rotationZ += 1;*/
+
 }

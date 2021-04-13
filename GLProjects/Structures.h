@@ -39,6 +39,16 @@ struct Vector3
 	{
 		return Vector3(-this->x, -this->y, -this->z);
 	}
+
+	Vector3 operator *(int arg)
+	{
+		return Vector3(this->x * arg, this->y * arg, this->z * arg);
+	}
+
+	Vector3 operator /(int arg)
+	{
+		return Vector3(this->x / arg, this->y / arg, this->z / arg);
+	}
 };
 
 std::ostream& operator<<(std::ostream& os, const Vector3& obj);

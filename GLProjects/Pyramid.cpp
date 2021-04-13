@@ -7,6 +7,10 @@ Pyramid::Pyramid(Mesh* mesh, GLfloat x, GLfloat y, GLfloat z) : SceneObject(mesh
 	_z = z;
 }
 
+Pyramid::~Pyramid()
+{
+}
+
 void Pyramid::SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ)
 {
 	_rotationX = rotationX;

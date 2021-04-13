@@ -24,6 +24,7 @@ Source::~Source(void)
 {
 	delete camera;
 	delete _player;
+	delete _root;
 	delete objects[0];
 	delete[] objects;
 	delete _lightPosition;
@@ -61,6 +62,9 @@ void Source::InitObjects()
 	for (int i = 50; i < 75; i++)
 		objects[i] = new Pyramid(cubeMesh, 0, 0, (i - 50) * 4);
 
+	Mesh* rootMesh = MeshLoader::LoadObj((char*)"Resources/Models/terrain.obj", (char*)"Resources/Textures/Grass.bmp");
+
+	_root = new GenericObject(rootMesh, 0, 0, 0);
 	_player = new Player(0, 0, 0);
 }
 
@@ -97,14 +101,14 @@ void Source::InitLights()
 	_lightPosition = new Vector4();
 	_lightPosition->x = 0.0;
 	_lightPosition->y = 0.0;
-	_lightPosition->z = 1.0;
+	_lightPosition->z = 20.0;
 	_lightPosition->w = 0.0;
 
 	_lightData = new Lighting();
-	_lightData->Ambient.x = 0.2;
-	_lightData->Ambient.y = 0.2;
-	_lightData->Ambient.z = 0.2;
-	_lightData->Ambient.w = 1.0;
+	_lightData->Ambient.x = 1.0;
+	_lightData->Ambient.y = 1.0;
+	_lightData->Ambient.z = 1.0;
+	_lightData->Ambient.w = 1;
 	_lightData->Diffuse.x = 0.8;
 	_lightData->Diffuse.y = 0.8;
 	_lightData->Diffuse.z = 0.8;
@@ -120,10 +124,14 @@ void Source::Update()
 	glLoadIdentity();
 
 	camera->eyePos = _player->GetPosition();
-	camera->eyePos.y -= 1;
+	camera->eyePos.y += 2.5;
+	Vector3 dir = _player->GetForward() * 8;
+	camera->eyePos.x -= dir.x;
+	camera->eyePos.y -= dir.y;
+	camera->eyePos.z -= dir.z;
 	//camera->lookingAtPos = camera->eyePos;
 	camera->lookingAtPos.x = camera->eyePos.x + cos(_player->GetRotation().x * M_PI / 180) * sin(_player->GetRotation().y * M_PI / 180);
-	camera->lookingAtPos.y = camera->eyePos.y + sin(_player->GetRotation().x * M_PI / 180) * sin(_player->GetRotation().y * M_PI / 180);
+	camera->lookingAtPos.y = camera->eyePos.y + sin(_player->GetRotation().x * M_PI / 180) * sin(_player->GetRotation().y * M_PI / 180) - 0.2;
 	camera->lookingAtPos.z = camera->eyePos.z + cos(_player->GetRotation().y * M_PI / 180);
 
 	gluLookAt(camera->eyePos.x, camera->eyePos.y, camera->eyePos.z,
@@ -151,6 +159,7 @@ void Source::Display()
 		objects[i]->Draw();
 	//objects[0]->Draw();
 
+	_root->Draw();
 	_player->Draw();
 
 	Vector3 v = { 0.0f, 780.0f, 0.0f };
@@ -312,6 +321,10 @@ void Source::Keyboard(unsigned char key, int x, int y)
 	if (key == ' ')
 	{
 		_player->Move(_player->GetUp());
+	}
+	if (key == 'x')
+	{
+		_player->Move(-_player->GetUp());
 	}
 	std::cout << key << std::endl;
 

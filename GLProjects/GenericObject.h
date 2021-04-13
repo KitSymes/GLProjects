@@ -5,13 +5,13 @@
 #include "GL\freeglut.h"
 #include "Structures.h"
 #include "SceneObject.h"
-class Player : public SceneObject
+class GenericObject : public SceneObject
 {
 private:
 	Material* _material;
 public:
-	Player(GLfloat x, GLfloat y, GLfloat z);
-	~Player();
+	GenericObject(Mesh* mesh, GLfloat x, GLfloat y, GLfloat z);
+	~GenericObject();
 
 	void Draw();
 	void Update();
