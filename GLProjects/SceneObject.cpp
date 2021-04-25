@@ -16,11 +16,21 @@ SceneObject::~SceneObject()
 	delete _mesh;
 }
 
+Vector3 SceneObject::GetPosition()
+{
+	return Vector3(_x, _y, _z);
+}
+
 void SceneObject::SetPosition(GLfloat positionX, GLfloat positionY, GLfloat positionZ)
 {
 	_x = positionX;
 	_y = positionY;
 	_z = positionZ;
+}
+
+Vector3 SceneObject::GetRotation()
+{
+	return Vector3(_rotationX, _rotationY, _rotationZ);
 }
 
 void SceneObject::SetRotation(GLfloat rotationX, GLfloat rotationY, GLfloat rotationZ)

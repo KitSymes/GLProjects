@@ -27,6 +27,10 @@ Source::~Source(void)
 	delete _root;
 	delete objects[0];
 	delete[] objects;
+	_checkpoints[0]->DeleteTextures();
+	for (int i = 0; i < 10; i++)
+		delete _checkpoints[i];
+	delete[] _checkpoints;
 	delete _lightPosition;
 	delete _lightData;
 }
@@ -62,9 +66,22 @@ void Source::InitObjects()
 	for (int i = 50; i < 75; i++)
 		objects[i] = new Pyramid(cubeMesh, 0, 0, (i - 50) * 4);
 
-	Mesh* rootMesh = MeshLoader::LoadObj((char*)"Resources/Models/terrain.obj", (char*)"Resources/Textures/Grass.bmp");
-
+	Mesh* rootMesh = MeshLoader::LoadObj((char*)"Resources/Models/terrain.obj");
+	rootMesh->_texture->LoadBitMap((char*)"Resources/Textures/Grass.bmp");
 	_root = new GenericObject(rootMesh, 0, 0, 0);
+
+
+	Mesh* checkpointMesh = MeshLoader::LoadObj((char*)"Resources/Models/checkpoint.obj");
+	Texture2D* checkpointWrong = new Texture2D();
+	checkpointWrong->LoadBitMap((char*)"Resources/Textures/CheckpointWrong.bmp");
+	Texture2D* checkpointNext = new Texture2D();
+	checkpointNext->LoadBitMap((char*)"Resources/Textures/CheckpointNext.bmp");
+	Texture2D* checkpointDone = new Texture2D();
+	checkpointDone->LoadBitMap((char*)"Resources/Textures/CheckpointDone.bmp");
+
+	for (int i = 0; i < 10; i++)
+		_checkpoints[i] = new Checkpoint(checkpointMesh, checkpointWrong, checkpointNext, checkpointDone, 0, 10, i * 10);
+
 	_player = new Player(0, 0, 0);
 }
 
@@ -78,6 +95,7 @@ void Source::InitGL(int argc, char* argv[])
 	glutDisplayFunc(GLUTCallbacks::Display);
 	glutTimerFunc(REFRESH_RATE, GLUTCallbacks::Timer, REFRESH_RATE);
 	glutKeyboardFunc(GLUTCallbacks::Keyboard);
+	glutKeyboardUpFunc(GLUTCallbacks::KeyboardUp);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	// Set the viewport to encase the entire window
@@ -99,9 +117,9 @@ void Source::InitGL(int argc, char* argv[])
 void Source::InitLights()
 {
 	_lightPosition = new Vector4();
-	_lightPosition->x = 0.0;
-	_lightPosition->y = 0.0;
-	_lightPosition->z = 20.0;
+	_lightPosition->x = -1.0;
+	_lightPosition->y = 2.0;
+	_lightPosition->z = -1.0;
 	_lightPosition->w = 0.0;
 
 	_lightData = new Lighting();
@@ -146,6 +164,21 @@ void Source::Update()
 	if (rotation >= 360.0f)
 		rotation = 0.0f;
 
+	float multi = 0.01f;
+
+	if (_player_forwards)
+		_player->_velocity += _player->GetForward() * multi;
+	if (_player_backwards)
+		_player->_velocity -= _player->GetForward() * multi;
+	if (_player_left)
+		_player->_velocity += _player->GetRight() * multi;
+	if (_player_right)
+		_player->_velocity -= _player->GetRight() * multi;
+	if (_player_up)
+		_player->_velocity += _player->GetUp() * multi;
+	if (_player_down)
+		_player->_velocity -= _player->GetUp() * multi;
+
 	_player->Update();
 
 	glutPostRedisplay();
@@ -160,11 +193,25 @@ void Source::Display()
 	//objects[0]->Draw();
 
 	_root->Draw();
+	for (int i = 0; i < 10; i++)
+	{
+		if (i < _player_checkpoint)
+			_checkpoints[i]->SetDone();
+		else if (i == _player_checkpoint)
+			_checkpoints[i]->SetNext();
+		else
+			_checkpoints[i]->SetWrong();
+		_checkpoints[i]->Draw();
+	}
 	_player->Draw();
 
-	Vector3 v = { 0.0f, 780.0f, 0.0f };
-	Color c = { 0.0f, 1.0f, 0.0f };
-	DrawString("Test String", &v, &c);
+	Vector3 position = { 0.0f, 780.0f, 0.0f };
+	Color colour = { 0.0f, 1.0f, 0.0f };
+	std::string checkpoint = "Checkpoint ";
+	DrawString(checkpoint.append(std::to_string(_player_checkpoint)).append(" / 10").c_str(), &position, &colour);
+	position = { 0.0f, 750.0f, 0.0f };
+	std::string lap = "Lap ";
+	DrawString(lap.append(std::to_string(_player_lap)).append(" / 3").c_str(), &position, &colour);
 
 	//DrawCube();
 	//DrawCubeArray();
@@ -291,7 +338,7 @@ void Source::DrawString(const char* text, Vector3* position, Color* color)
 	glPopMatrix();*/
 }
 
-void Source::Keyboard(unsigned char key, int x, int y)
+void Source::Keyboard(unsigned char key, int x, int y, bool keyUp)
 {
 	if (key == 'q')
 		camera->eyePos.x += 2.0f;
@@ -304,28 +351,28 @@ void Source::Keyboard(unsigned char key, int x, int y)
 
 	if (key == 'w')
 	{
-		_player->Move(_player->GetForward());
+		_player_forwards = !keyUp;
 	}
 	if (key == 's')
 	{
-		_player->Move(-_player->GetForward());
+		_player_backwards = !keyUp;
 	}
 	if (key == 'a')
 	{
-		_player->Move(_player->GetRight());
+		_player_left = !keyUp;
 	}
 	if (key == 'd')
 	{
-		_player->Move(-_player->GetRight());
+		_player_right = !keyUp;
 	}
 	if (key == ' ')
 	{
-		_player->Move(_player->GetUp());
+		_player_up = !keyUp;
 	}
 	if (key == 'x')
 	{
-		_player->Move(-_player->GetUp());
+		_player_down = !keyUp;
 	}
-	std::cout << key << std::endl;
+	//std::cout << key << std::endl;
 
 }

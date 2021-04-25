@@ -108,7 +108,7 @@ namespace MeshLoader
 		return mesh;
 	}
 
-	Mesh* MeshLoader::LoadObj(char* path, char* texPath)
+	Mesh* MeshLoader::LoadObj(char* path)
 	{
 		Mesh* mesh = new Mesh();
 
@@ -245,8 +245,6 @@ namespace MeshLoader
 			mesh->Vertices[i] = vertices[i];
 
 		mesh->_texture = new Texture2D();
-		//mesh->_texture->Load(texPath, width, height);
-		mesh->_texture->LoadBitMap(texPath);
 
 		return mesh;
 	}

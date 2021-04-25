@@ -1,13 +1,15 @@
-#include "Player.h"
+#include "Checkpoint.h"
 
-Player::Player(GLfloat x, GLfloat y, GLfloat z) : SceneObject()
+Checkpoint::Checkpoint(Mesh* mesh, Texture2D* wrong, Texture2D* next, Texture2D* done, GLfloat x, GLfloat y, GLfloat z) : SceneObject(mesh)
 {
-	_mesh = MeshLoader::LoadObj((char*)"Resources/Models/fighter.obj");
-	_mesh->_texture->LoadBitMap((char*)"Resources/Textures/Player.bmp");
-
 	_x = x;
 	_y = y;
 	_z = z;
+
+	_textureWrong = wrong;
+	_textureNext = next;
+	_textureDone = done;
+	_inUse = wrong;
 
 	_material = new Material();
 	_material->Shininess = 100.0f;
@@ -28,21 +30,37 @@ Player::Player(GLfloat x, GLfloat y, GLfloat z) : SceneObject()
 	_material->Specular.w = 1.0;
 }
 
-Player::~Player()
+Checkpoint::~Checkpoint()
 {
 	delete _material;
 }
 
-void Player::Draw()
+void Checkpoint::SetWrong()
+{
+	_inUse = _textureWrong;
+}
+
+void Checkpoint::SetNext()
+{
+	_inUse = _textureNext;
+}
+
+void Checkpoint::SetDone()
+{
+	_inUse = _textureDone;
+}
+
+void Checkpoint::DeleteTextures()
+{
+	delete _textureWrong;
+	delete _textureNext;
+	delete _textureDone;
+}
+
+void Checkpoint::Draw()
 {
 	if (_mesh != nullptr) {
-		glBindTexture(GL_TEXTURE_2D, _mesh->_texture->GetID());
-		/*glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, _mesh->Vertices);
-		glTexCoordPointer(2, GL_FLOAT, 0, _mesh->TexCoords);
-		glNormalPointer(GL_FLOAT, 0, _mesh->Normals);*/
+		glBindTexture(GL_TEXTURE_2D, _inUse->GetID());
 		glMaterialfv(GL_FRONT, GL_AMBIENT, &(_material->Ambient.x));
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, &(_material->Diffuse.x));
 		glMaterialfv(GL_FRONT, GL_SPECULAR, &(_material->Specular.x));
@@ -72,27 +90,7 @@ void Player::Draw()
 	}
 }
 
-void Player::Update()
+void Checkpoint::Update()
 {
-	float bound = 0.0002f;
-	if (_velocity.x != 0)
-	{
-		_velocity.x += (_velocity.x > 0 ? -1 : 1) * (max(abs(_velocity.x) / 100, bound));
-		if (-bound < _velocity.x && _velocity.x < bound)
-			_velocity.x = 0;
-	}
-	if (_velocity.y != 0)
-	{
-		_velocity.y += (_velocity.y > 0 ? -1 : 1) * (max(abs(_velocity.y) / 100, bound));
-		if (-bound < _velocity.y && _velocity.y < bound)
-			_velocity.y = 0;
-	}
-	if (_velocity.z != 0)
-	{
-		_velocity.z += (_velocity.z > 0 ? -1 : 1) * (max(abs(_velocity.z) / 100, bound));
-		if (-bound < _velocity.z && _velocity.z < bound)
-			_velocity.z = 0;
-	}
 
-	Move(_velocity);
 }

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef _GenericObject_H
+#define _GenericObject_H
 #include <Windows.h>
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -16,4 +18,4 @@ public:
 	void Draw();
 	void Update();
 };
-
+#endif

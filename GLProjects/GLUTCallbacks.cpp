@@ -32,6 +32,11 @@ namespace GLUTCallbacks
 
 	void Keyboard(unsigned char key, int x, int y)
 	{
-		gl->Keyboard(key, x, y);
+		gl->Keyboard(key, x, y, false);
+	}
+
+	void KeyboardUp(unsigned char key, int x, int y)
+	{
+		gl->Keyboard(key, x, y, true);
 	}
 }

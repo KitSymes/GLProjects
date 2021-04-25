@@ -30,9 +30,23 @@ struct Vector3
 		return Vector3(this->x + arg.x, this->y + arg.y, this->z + arg.z);
 	}
 
+	void operator +=(Vector3 arg)
+	{
+		this->x += arg.x;
+		this->y += arg.y;
+		this->z += arg.z;
+	}
+
 	Vector3 operator -(Vector3 arg)
 	{
 		return Vector3(this->x - arg.x, this->y - arg.y, this->z - arg.z);
+	}
+
+	void operator -=(Vector3 arg)
+	{
+		this->x -= arg.x;
+		this->y -= arg.y;
+		this->z -= arg.z;
 	}
 
 	Vector3 operator -()
@@ -40,12 +54,12 @@ struct Vector3
 		return Vector3(-this->x, -this->y, -this->z);
 	}
 
-	Vector3 operator *(int arg)
+	Vector3 operator *(float arg)
 	{
 		return Vector3(this->x * arg, this->y * arg, this->z * arg);
 	}
 
-	Vector3 operator /(int arg)
+	Vector3 operator /(float arg)
 	{
 		return Vector3(this->x / arg, this->y / arg, this->z / arg);
 	}
@@ -55,7 +69,7 @@ std::ostream& operator<<(std::ostream& os, const Vector3& obj);
 
 struct Vector4
 {
-	float w, x, y, z;
+	float x, y, z, w;
 };
 
 struct Camera
