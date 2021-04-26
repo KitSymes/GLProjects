@@ -45,6 +45,11 @@ private:
 	bool _player_rotateLeft = false;
 	bool _player_rotateRight = false;
 
+	int _player_time_total;
+	int _player_time_1;
+	int _player_time_2;
+	int _player_time_3;
+
 	clock_t start_time;
 public:
 	// Constructors and Deconstructors

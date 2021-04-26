@@ -148,10 +148,11 @@ void Source::Update()
 	i++;
 	i = i % 360;
 
-	if (0 <= _player_lap && _player_lap < 4)
+	if (0 < _player_lap && _player_lap < 4)
 	{
-		float multi = 0.01f;
+		_player_time_total = (clock() - start_time) / CLOCKS_PER_SEC;
 
+		float multi = 0.01f;
 		if (_player_forwards)
 			_player->_velocity += _player->GetForward() * multi;
 		if (_player_backwards)
@@ -201,6 +202,18 @@ void Source::Update()
 				_player_checkpoint++;
 				if (_player_checkpoint >= 10)
 				{
+					switch (_player_lap)
+					{
+					case 1:
+						_player_time_1 = (clock() - start_time) / CLOCKS_PER_SEC;
+						break;
+					case 2:
+						_player_time_2 = (clock() - start_time) / CLOCKS_PER_SEC - _player_time_1;
+						break;
+					case 3:
+						_player_time_3 = (clock() - start_time) / CLOCKS_PER_SEC - _player_time_1 - _player_time_2;
+						break;
+					}
 					_player_checkpoint = 0;
 					_player_lap++;
 				}
@@ -238,11 +251,6 @@ void Source::Display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clears frame
 
-	/*for (int i = 0; i < 75; i++)
-		if (objects[i] != nullptr)
-			objects[i]->Draw();*/
-			//objects[0]->Draw();
-
 	_root->Draw();
 	for (int i = 0; i < 10; i++)
 	{
@@ -256,68 +264,39 @@ void Source::Display()
 	}
 	_player->Draw();
 
-	Vector3 position = { 0.0f, 780.0f, 0.0f };
+	Vector3 position;
 	Color colour = { 0.0f, 1.0f, 0.0f };
-	std::string checkpoint = "Checkpoint: ";
-	DrawString(checkpoint.append(std::to_string(_player_checkpoint)).append(" / 10").c_str(), &position, &colour);
-	position = { 0.0f, 750.0f, 0.0f };
-	std::string lap = "Lap: ";
-	DrawString(lap.append(std::to_string(_player_lap)).append(" / 3").c_str(), &position, &colour);
-	position = { 0.0f, 720.0f, 0.0f };
-	std::string time = "Time: ";
-	DrawString(time.append(std::to_string((clock() - start_time) / CLOCKS_PER_SEC)).c_str(), &position, &colour);
+	if (_player_lap < 4)
+	{
+		position = { 0.0f, 780.0f, 0.0f };
+		std::string checkpoint = "Checkpoint: ";
+		DrawString(checkpoint.append(std::to_string(_player_checkpoint)).c_str(), &position, &colour);
+		position = { 0.0f, 750.0f, 0.0f };
+		std::string lap = "Lap: ";
+		DrawString(lap.append(std::to_string(_player_lap)).c_str(), &position, &colour);
+		position = { 0.0f, 720.0f, 0.0f };
+		std::string time = "Time: ";
+		DrawString(time.append(std::to_string(_player_time_total)).c_str(), &position, &colour);
+	}
+	else
+	{
+		position = { 0.0f, 780.0f, 0.0f };
+		std::string lap1 = "Lap 1 Time: ";
+		DrawString(lap1.append(std::to_string(_player_time_1)).append(" / 10").c_str(), &position, &colour);
+		position = { 0.0f, 750.0f, 0.0f };
+		std::string lap2 = "Lap 2 Time: ";
+		DrawString(lap2.append(std::to_string(_player_time_2)).append(" / 3").c_str(), &position, &colour);
+		position = { 0.0f, 720.0f, 0.0f };
+		std::string lap3 = "Lap 3 Time: ";
+		DrawString(lap3.append(std::to_string(_player_time_3)).c_str(), &position, &colour);
+		position = { 0.0f, 690.0f, 0.0f };
+		std::string time = "Total Time: ";
+		DrawString(time.append(std::to_string(_player_time_total)).c_str(), &position, &colour);
+	}
 
 	glFlush(); // Sends to Graphics Card or something
 	glutSwapBuffers();
 }
-
-void Source::DrawPolygon()
-{
-	glBegin(GL_POLYGON); // Starts Drawing Polygon
-	{
-		glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(-0.6f, 0.2f);
-		/*glColor4f(0.9f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(-0.4, 0.2);
-		glColor4f(0.8f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(-0.4, 0);
-		glColor4f(0.7f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(-0.2, -0.25);
-		glColor4f(0.6f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(0.2, -0.25);
-		glColor4f(0.5f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(0.4, 0);
-		glColor4f(0.4f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(0.4, 0.2);*/
-		glColor4f(0.3f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(0.6f, 0.2f);
-		glColor4f(0.2f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(0.6f, -0.2f);
-		glColor4f(0.1f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(0.2f, -0.45f);
-		glColor4f(0.0f, 1.0f, 1.0f, 0.0f);
-		glVertex2f(-0.2f, -0.45f);
-		glColor4f(0.5f, 0.9f, 1.0f, 0.0f);
-		glVertex2f(-0.6f, -0.2f);
-	}
-	glEnd(); // Stops
-}
-
-void Source::DrawHex(float scale)
-{
-	scale /= 2;
-	glBegin(GL_POLYGON);
-	{
-		glVertex2f(-(0.05f * scale), (0.03f * scale));
-		glVertex2f(0, (0.06f * scale));
-		glVertex2f((0.05f * scale), (0.03f * scale));
-		glVertex2f((0.05f * scale), -(0.03f * scale));
-		glVertex2f(0, -(0.06f * scale));
-		glVertex2f(-(0.05f * scale), -(0.03f * scale));
-	}
-	glEnd();
-}
-
 void Source::DrawString(const char* text, Vector3* position, Color* color)
 {
 	glPushMatrix();

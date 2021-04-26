@@ -12,14 +12,14 @@ Player::Player(GLfloat x, GLfloat y, GLfloat z) : SceneObject()
 	_material = new Material();
 	_material->Shininess = 255.0f;
 
-	_material->Ambient.x = 0.05*5;
-	_material->Ambient.y = 0.05*5;
-	_material->Ambient.z = 0.05*5;
+	_material->Ambient.x = 0.05*8;
+	_material->Ambient.y = 0.05*8;
+	_material->Ambient.z = 0.05*8;
 	_material->Ambient.w = 1.0;
 
-	_material->Diffuse.x = 0.05 * 4;
-	_material->Diffuse.y = 0.05 * 4;
-	_material->Diffuse.z = 0.05 * 4;
+	_material->Diffuse.x = 0.05 * 20;
+	_material->Diffuse.y = 0.05 * 20;
+	_material->Diffuse.z = 0.05 * 20;
 	_material->Diffuse.w = 1.0;
 
 	_material->Specular.x = 1.0;

@@ -9,14 +9,14 @@ GenericObject::GenericObject(Mesh* mesh, GLfloat x, GLfloat y, GLfloat z) : Scen
 	_material = new Material();
 	_material->Shininess = 0.0f;
 
-	_material->Ambient.x = 0.05 * 10;
-	_material->Ambient.y = 0.05 * 10;
-	_material->Ambient.z = 0.05 * 10;
+	_material->Ambient.x = 0.05 * 8;
+	_material->Ambient.y = 0.05 * 8;
+	_material->Ambient.z = 0.05 * 8;
 	_material->Ambient.w = 1.0;
 
-	_material->Diffuse.x = 0.05 * 4;
-	_material->Diffuse.y = 0.05 * 4;
-	_material->Diffuse.z = 0.05 * 4;
+	_material->Diffuse.x = 0.05 * 20;
+	_material->Diffuse.y = 0.05 * 20;
+	_material->Diffuse.z = 0.05 * 20;
 	_material->Diffuse.w = 1.0;
 
 	_material->Specular.x = 1.0;
