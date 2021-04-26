@@ -14,14 +14,14 @@ Checkpoint::Checkpoint(Mesh* mesh, Texture2D* wrong, Texture2D* next, Texture2D*
 	_material = new Material();
 	_material->Shininess = 100.0f;
 
-	_material->Ambient.x = 0.05;
-	_material->Ambient.y = 0.05;
-	_material->Ambient.z = 0.05;
+	_material->Ambient.x = 0.05 * 5;
+	_material->Ambient.y = 0.05 * 5;
+	_material->Ambient.z = 0.05 * 5;
 	_material->Ambient.w = 1.0;
 
-	_material->Diffuse.x = 0.05 * 2;
-	_material->Diffuse.y = 0.05 * 2;
-	_material->Diffuse.z = 0.05 * 2;
+	_material->Diffuse.x = 0.05 * 4;
+	_material->Diffuse.y = 0.05 * 4;
+	_material->Diffuse.z = 0.05 * 4;
 	_material->Diffuse.w = 1.0;
 
 	_material->Specular.x = 1.0;
@@ -67,10 +67,10 @@ void Checkpoint::Draw()
 		glMaterialfv(GL_FRONT, GL_SHININESS, &(_material->Shininess));
 
 		glPushMatrix();
+		glTranslatef(_x, _y, _z);
 		glRotatef(_rotationX, 1.0f, 0.0f, 0.0f);
 		glRotatef(_rotationY, 0.0f, 1.0f, 0.0f);
 		glRotatef(_rotationZ, 0.0f, 0.0f, 1.0f);
-		glTranslatef(_x, _y, _z);
 		glBegin(GL_TRIANGLES);
 		for (int i = 0; i < _mesh->IndexCount; i++)
 		{

@@ -7,16 +7,16 @@ GenericObject::GenericObject(Mesh* mesh, GLfloat x, GLfloat y, GLfloat z) : Scen
 	_z = z;
 
 	_material = new Material();
-	_material->Shininess = 100.0f;
+	_material->Shininess = 0.0f;
 
-	_material->Ambient.x = 0.05;
-	_material->Ambient.y = 0.05;
-	_material->Ambient.z = 0.05;
+	_material->Ambient.x = 0.05 * 10;
+	_material->Ambient.y = 0.05 * 10;
+	_material->Ambient.z = 0.05 * 10;
 	_material->Ambient.w = 1.0;
 
-	_material->Diffuse.x = 0.05 * 2;
-	_material->Diffuse.y = 0.05 * 2;
-	_material->Diffuse.z = 0.05 * 2;
+	_material->Diffuse.x = 0.05 * 4;
+	_material->Diffuse.y = 0.05 * 4;
+	_material->Diffuse.z = 0.05 * 4;
 	_material->Diffuse.w = 1.0;
 
 	_material->Specular.x = 1.0;
@@ -40,10 +40,10 @@ void GenericObject::Draw()
 		glMaterialfv(GL_FRONT, GL_SHININESS, &(_material->Shininess));
 
 		glPushMatrix();
+		glTranslatef(_x, _y, _z);
 		glRotatef(_rotationX, 1.0f, 0.0f, 0.0f);
 		glRotatef(_rotationY, 0.0f, 1.0f, 0.0f);
 		glRotatef(_rotationZ, 0.0f, 0.0f, 1.0f);
-		glTranslatef(_x, _y, _z);
 		glBegin(GL_TRIANGLES);
 		for (int i = 0; i < _mesh->IndexCount; i++)
 		{
@@ -61,6 +61,11 @@ void GenericObject::Draw()
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
+
+	if (sibling != nullptr)
+		sibling->Draw();
+	if (child != nullptr)
+		child->Draw();
 }
 
 void GenericObject::Update()

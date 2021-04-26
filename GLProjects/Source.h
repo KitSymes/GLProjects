@@ -20,9 +20,9 @@
 class Source
 {
 private:
-	float rotation;
 	Camera* camera;
-	SceneObject* objects[75];
+
+	// Directional Light
 	Vector4* _lightPosition;
 	Lighting* _lightData;
 
@@ -31,20 +31,27 @@ private:
 	Checkpoint* _checkpoints[10];
 	Player* _player;
 
+	// Player Variables
 	int _player_checkpoint = 0;
 	int _player_lap = 1;
+
+	// Player Movement Variables
 	bool _player_forwards = false;
 	bool _player_backwards = false;
 	bool _player_left = false;
 	bool _player_right = false;
 	bool _player_up = false;
 	bool _player_down = false;
+	bool _player_rotateLeft = false;
+	bool _player_rotateRight = false;
+
+	clock_t start_time;
 public:
-	// Constructor
+	// Constructors and Deconstructors
 	Source(int argc, char* argv[]);
-	// Deconstructor
 	~Source(void);
 
+	// Init Methods
 	void InitObjects();
 	void InitGL(int argc, char* argv[]);
 	void InitLights();
@@ -53,13 +60,11 @@ public:
 	void Update();
 	// Draw Screen
 	void Display();
-	// Draw Mouth Poly
-	void DrawPolygon();
-	// Draw a Regular Hexagon at 0,0 with specified scale
-	void DrawHex(float scale);
 	// Draw a String
 	void DrawString(const char* text, Vector3* position, Color* color);
 
 	void Keyboard(unsigned char key, int x, int y, bool keyUp);
+
+	bool InRange(float comparison, float bound1, float bound2);
 };
 

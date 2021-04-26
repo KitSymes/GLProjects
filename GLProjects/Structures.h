@@ -15,7 +15,9 @@ struct Vector3
 
 	Vector3()
 	{
-
+		this->x = 0.0f;
+		this->y = 0.0f;
+		this->z = 0.0f;
 	}
 
 	Vector3(GLfloat x, GLfloat y, GLfloat z)
@@ -62,6 +64,16 @@ struct Vector3
 	Vector3 operator /(float arg)
 	{
 		return Vector3(this->x / arg, this->y / arg, this->z / arg);
+	}
+
+	float dotProduct(Vector3 arg)
+	{
+		return this->x * arg.x + this->y * arg.y + this->z * arg.z;
+	}
+
+	float distanceSquared(Vector3 arg)
+	{
+		return pow(this->x - arg.x, 2) + pow(this->y - arg.y, 2) + pow(this->z - arg.z, 2);
 	}
 };
 
