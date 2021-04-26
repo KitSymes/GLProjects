@@ -13,7 +13,8 @@ SceneObject::SceneObject(Mesh* mesh)
 
 SceneObject::~SceneObject()
 {
-	delete _mesh;
+	if (_mesh != nullptr)
+		delete _mesh;
 }
 
 Vector3 SceneObject::GetPosition()
