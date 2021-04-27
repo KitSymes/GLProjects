@@ -270,10 +270,10 @@ void Source::Display()
 	{
 		position = { 0.0f, 780.0f, 0.0f };
 		std::string checkpoint = "Checkpoint: ";
-		DrawString(checkpoint.append(std::to_string(_player_checkpoint)).c_str(), &position, &colour);
+		DrawString(checkpoint.append(std::to_string(_player_checkpoint)).append(" / 10").c_str(), &position, &colour);
 		position = { 0.0f, 750.0f, 0.0f };
 		std::string lap = "Lap: ";
-		DrawString(lap.append(std::to_string(_player_lap)).c_str(), &position, &colour);
+		DrawString(lap.append(std::to_string(_player_lap)).append(" / 3").c_str(), &position, &colour);
 		position = { 0.0f, 720.0f, 0.0f };
 		std::string time = "Time: ";
 		DrawString(time.append(std::to_string(_player_time_total)).c_str(), &position, &colour);
@@ -282,10 +282,10 @@ void Source::Display()
 	{
 		position = { 0.0f, 780.0f, 0.0f };
 		std::string lap1 = "Lap 1 Time: ";
-		DrawString(lap1.append(std::to_string(_player_time_1)).append(" / 10").c_str(), &position, &colour);
+		DrawString(lap1.append(std::to_string(_player_time_1)).c_str(), &position, &colour);
 		position = { 0.0f, 750.0f, 0.0f };
 		std::string lap2 = "Lap 2 Time: ";
-		DrawString(lap2.append(std::to_string(_player_time_2)).append(" / 3").c_str(), &position, &colour);
+		DrawString(lap2.append(std::to_string(_player_time_2)).c_str(), &position, &colour);
 		position = { 0.0f, 720.0f, 0.0f };
 		std::string lap3 = "Lap 3 Time: ";
 		DrawString(lap3.append(std::to_string(_player_time_3)).c_str(), &position, &colour);
