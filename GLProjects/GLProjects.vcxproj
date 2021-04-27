@@ -28,7 +28,6 @@
     <ClInclude Include="GL\glut.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Pyramid.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Source.h" />
     <ClInclude Include="GenericObject.h" />
@@ -41,7 +40,6 @@
     <ClCompile Include="GLUTCallbacks.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="GenericObject.cpp" />
@@ -49,6 +47,7 @@
     <ClCompile Include="Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="freeglut.dll" />
   </ItemGroup>
   <ItemGroup>

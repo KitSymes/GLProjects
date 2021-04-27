@@ -10,7 +10,6 @@
 #include <corecrt_math_defines.h>
 #include <string>
 #include "Cube.h"
-#include "Pyramid.h"
 #include "MeshLoader.h"
 #include "Player.h"
 #include "GenericObject.h"

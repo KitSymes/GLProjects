@@ -45,9 +45,6 @@
     <ClInclude Include="SceneObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pyramid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Texture2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -77,9 +74,6 @@
     <ClCompile Include="SceneObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pyramid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Texture2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -98,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="freeglut.dll" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="freeglut.lib" />
